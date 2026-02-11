@@ -3,212 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Valentine's Question</title>
+    <title>For My Valentine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        /* --- CSS Styles --- */
         :root {
-            --primary-color: #d32f2f; /* Deep Romantic Red */
-            --secondary-color: #ffcdd2; /* Soft Pink */
-            --accent-color: #ffeb3b; /* Gold/Highlight */
-            --text-color: #4a4a4a;
-            --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            /* Adjusted glass for better readability over floral background */
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --primary: #be1e68; /* Peony Pink */
+            --secondary: #d84315; /* Ranunculus Orange/Red */
+            --text-main: #4a1c2a;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Georgia', serif;
-            background: var(--bg-gradient);
+            /* High-quality Peony/Ranunculus Background Image */
+            background: url('https://images.unsplash.com/photo-1563241527-9a48fdbcb86e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             position: relative;
         }
 
-        /* Falling Hearts Background Animation */
-        .heart-bg {
+        /* Overlay to darken background slightly so text pops */
+        .overlay {
             position: absolute;
-            top: -10%;
-            color: rgba(255, 0, 0, 0.3);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Floating Flower Animation */
+        .flower-floater {
+            position: absolute;
+            bottom: -10vh;
             font-size: 2rem;
-            animation: fall linear infinite;
-            z-index: 0;
+            animation: floatUp linear infinite;
+            z-index: 2;
+            opacity: 0.8;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Main Card Container */
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            z-index: 10;
+        .container {
             position: relative;
-            border: 2px solid #fff;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
 
         h1 {
-            color: var(--primary-color);
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
+            line-height: 1.2;
         }
 
         p {
-            color: var(--text-color);
+            color: var(--text-main);
+            font-size: 1.05rem;
             line-height: 1.6;
-            font-size: 1.1rem;
             margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .highlight {
-            font-weight: bold;
-            color: var(--primary-color);
+            color: var(--primary);
+            font-weight: 700;
         }
 
-        .mystery-box {
-            background: #fff0f3;
-            border: 2px dashed var(--secondary-color);
+        /* The Special Banner */
+        .date-details {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            border: 1px dashed var(--primary);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin: 20px 0;
-            color: #880e4f;
+            color: var(--text-main);
         }
 
-        /* Time Selection Buttons */
-        .time-options {
+        /* Time Buttons */
+        .time-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .time-btn {
-            background-color: white;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 10px 20px;
-            border-radius: 25px;
+            background: white;
+            border: 1px solid #e1bee7;
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: var(--text-main);
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
             transition: all 0.3s ease;
-            font-family: 'Helvetica', sans-serif;
-            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .time-btn:hover {
-            background-color: var(--primary-color);
+            background: var(--primary);
             color: white;
+            border-color: var(--primary);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+            box-shadow: 0 8px 15px rgba(190, 30, 104, 0.2);
         }
 
-        /* Success Overlay (Hidden by default) */
-        #success-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-        }
-
-        #success-overlay h2 {
-            color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        #chosen-time-display {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #4a4a4a;
-        }
-
-        .emoji-rain {
+        /* Flower Decor on Card */
+        .card-decor {
             font-size: 3rem;
-            margin-top: 20px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Success View */
+        .success-view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #selected-time {
+            font-size: 1.4rem;
+            display: block;
+            margin-top: 10px;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
         }
 
     </style>
 </head>
 <body>
 
+    <div class="overlay"></div>
+
     <script>
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-bg');
-            heart.innerHTML = '❤';
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 3 + 2 + "s"; 
-            heart.style.fontSize = Math.random() * 20 + 10 + "px";
-            document.body.appendChild(heart);
+        // Mapping specific emojis to the requested flowers:
+        // 🌷 = Tulip
+        // 🌸 = Peony / Ranunculus style (Lush pink)
+        // 🏵️ = Rosette style (Ranunculus/Dahlia shape)
+        const flowers = ['🌷', '🌸', '🏵️', '🌷', '🌸']; 
+        
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('flower-floater');
+            flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
             
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
+            // Randomize position and speed
+            flower.style.left = Math.random() * 100 + "vw";
+            flower.style.animationDuration = (Math.random() * 5 + 5) + "s"; // 5 to 10 seconds
+            flower.style.fontSize = (Math.random() * 1 + 1.5) + "rem";
+            
+            document.body.appendChild(flower);
+            
+            // Clean up
+            setTimeout(() => { flower.remove(); }, 10000);
         }
-        setInterval(createHeart, 300);
+        // Create a flower every 400ms
+        setInterval(createFlower, 400);
     </script>
 
-    <div class="card">
-        <div id="success-overlay">
-            <h2>It's a Date! ❤️</h2>
-            <p>I'll make the reservation for:</p>
-            <div id="chosen-time-display"></div>
-            <p style="margin-top: 20px;">Can't wait to see you.</p>
-            <div class="emoji-rain">🥂🌹🌃</div>
-        </div>
+    <div class="container">
+        <div class="glass-card" id="main-card">
+            
+            <div id="question-view">
+                <span class="card-decor">🌷</span>
+                <h1>Will you be my Valentine?</h1>
+                
+                <p>I'd love to take you to <span class="highlight">Portland City Grill</span> for sweeping views, incredible food, and your favorite wine.</p>
+                
+                <div class="date-details">
+                    <strong>The Plan:</strong><br>
+                    Dinner followed by a <span class="highlight">Mystery Dessert</span> adventure.
+                </div>
 
-        <h1>Will you be my Valentine?</h1>
-        
-        <p>I'd love to take you out for an evening of sweeping views and amazing food at <span class="highlight">Portland City Grill</span>.</p>
-        
-        <div class="mystery-box">
-            🤫 <strong>The Plan:</strong><br>
-            Dinner with a view, followed by a <span class="highlight">Mystery Dessert Adventure</span> afterwards.
-        </div>
+                <p style="font-size: 0.9rem; margin-bottom: 10px;">Pick a time for Feb 12th:</p>
 
-        <p>If you're free, please pick the time that works best for you on <strong>Feb 12th</strong>:</p>
+                <div class="time-grid">
+                    <button class="time-btn" onclick="acceptDate('6:15 PM')">6:15 PM</button>
+                    <button class="time-btn" onclick="acceptDate('6:45 PM')">6:45 PM</button>
+                    <button class="time-btn" onclick="acceptDate('7:00 PM')">7:00 PM</button>
+                    <button class="time-btn" onclick="acceptDate('7:15 PM')">7:15 PM</button>
+                    <button class="time-btn" onclick="acceptDate('8:30 PM')">8:30 PM</button>
+                </div>
+            </div>
 
-        <div class="time-options">
-            <button class="time-btn" onclick="selectTime('6:15 PM')">6:15 PM</button>
-            <button class="time-btn" onclick="selectTime('6:45 PM')">6:45 PM</button>
-            <button class="time-btn" onclick="selectTime('7:00 PM')">7:00 PM</button>
-            <button class="time-btn" onclick="selectTime('7:15 PM')">7:15 PM</button>
-            <button class="time-btn" onclick="selectTime('8:30 PM')">8:30 PM</button>
+            <div class="success-view" id="success-view">
+                <span class="card-decor">🥂</span>
+                <h1>It's a Date!</h1>
+                <p>I've locked it in for: <span id="selected-time" class="highlight"></span></p>
+                <p>I can't wait to see you.</p>
+            </div>
+
         </div>
     </div>
 
     <script>
-        function selectTime(time) {
-            // Show the success overlay
-            const overlay = document.getElementById('success-overlay');
-            const display = document.getElementById('chosen-time-display');
-            
-            display.innerText = time;
-            overlay.style.display = 'flex';
-            
-            // Optional: Trigger a burst of confetti or extra hearts here if desired
-            // For now, we launch a few extra quick hearts
-            for(let i=0; i<20; i++) {
-                setTimeout(createHeart, i * 100);
-            }
+        function acceptDate(time) {
+            // Trigger Confetti (Gold and Deep Pinks - NO WHITE)
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            // Colors: Deep Pink, Gold, Red (No White)
+            const colors = ['#c2185b', '#ffeb3b', '#d32f2f', '#ff80ab'];
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // Switch Views
+            document.getElementById('question-view').style.display = 'none';
+            const successView = document.getElementById('success-view');
+            successView.style.display = 'flex';
+            document.getElementById('selected-time').innerText = time;
         }
     </script>
 </body>
